@@ -2,10 +2,16 @@ pipeline {
     agent { label 'dev' }
 
     stages {
+        stage('Checkout Code') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/dhimanankit1593/multienv-pipeline.git'
+            }
+        }
+
         stage('DEV Deploy') {
             steps {
                 sh '''
-                  ls -l
                   sudo cp index.php /var/www/html/index.php
                   sudo systemctl restart apache2
                 '''
