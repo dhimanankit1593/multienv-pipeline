@@ -9,12 +9,21 @@ pipeline {
             }
         }
 
-        stage('DEV Deploy') {
+        stage('Apache PHP Config') {
             steps {
                 sh '''
-                  sudo cp index.php /var/www/html/index.php
+                  sudo a2enmod php* || true
+                  sudo sed -i 's/^DirectoryIndex.*/DirectoryIndex index.php index.html index.cgi index.pl/' \
+                  /etc/apache2/mods-enabled/dir.conf
+                  sudo rm -f /var/www/html/index.html
                   sudo systemctl restart apache2
                 '''
+            }
+        }
+
+        stage('DEV Deploy') {
+            steps {
+                sh 'sudo cp index.php /var/www/html/index.php'
             }
         }
     }
