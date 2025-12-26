@@ -1,0 +1,26 @@
+pipeline {
+    agent { label 'dev' }
+
+    stages {
+        stage('DEV Deploy') {
+            steps {
+                ws('/home/jenkins/workspace/dev') {
+                    sh '''
+                      cp index.php /var/www/html/index.php
+                      sudo systemctl restart apache2
+                    '''
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "DEV SUCCESS → Triggering STAGING"
+            build job: 'php-staging-pipeline', wait: false
+        }
+        failure {
+            echo "DEV FAILED → STOP"
+        }
+    }
+}
