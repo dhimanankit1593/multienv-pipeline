@@ -4,12 +4,11 @@ pipeline {
     stages {
         stage('DEV Deploy') {
             steps {
-                ws('/home/jenkins/workspace/dev') {
-                    sh '''
-                      cp index.php /var/www/html/index.php
-                      sudo systemctl restart apache2
-                    '''
-                }
+                sh '''
+                  ls -l
+                  sudo cp index.php /var/www/html/index.php
+                  sudo systemctl restart apache2
+                '''
             }
         }
     }
